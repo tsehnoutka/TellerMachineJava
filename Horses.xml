@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Horses>
+	<Horse Number="1">
+		<Name>That Darn Grey Cat</Name>
+		<Odds>5</Odds>
+		<Won>won</Won>
+	</Horse>
+	<Horse Number="2">
+		<Name>Fort Utopis</Name>
+		<Odds>10</Odds>
+		<Won>lost</Won>
+	</Horse>
+	<Horse Number="3">
+		<Name>Count Sheep</Name>
+		<Odds>9</Odds>
+	 	<Won>lost</Won>
+	 </Horse>
+	<Horse Number="4">
+		<Name>Ms Traitou</Name>
+		<Odds>4</Odds>
+		<Won>lost</Won>
+	</Horse>
+	<Horse Number="5">
+		<Name>Real Princess</Name>
+		<Odds>3</Odds>
+		<Won>lost</Won>
+	</Horse>
+	<Horse Number="6">
+		<Name>Pa Kettle</Name>
+		<Odds>5</Odds>
+		<Won>lost</Won>
+	</Horse>
+	<Horse Number="7">
+		<Name>Gin Stinger</Name>
+		<Odds>6</Odds>
+		<Won>lost</Won>
+	</Horse>
+</Horses>
