@@ -49,8 +49,7 @@ public class TellerMachine {
 				}
 				else {
 					//get the amount wagered
-					int decimal = commandLine[1].indexOf('.');
-					if (decimal != -1){
+					if (commandLine[1].indexOf('.') != -1){
 						System.out.println("Invalid Bet : " + commandLine[1]);
 						continue;
 					}
