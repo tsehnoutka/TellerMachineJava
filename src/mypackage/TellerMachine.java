@@ -76,14 +76,12 @@ public class TellerMachine {
 				}  //  end else
 			}   // end if Numeric
 			else {
-				switch (command) {
+				switch (command.toUpperCase()) {
 				case "R":
-				case "r":
 					// re-stock cash
 					myTill.RestockDrawer();
 					break;
 				case "W":
-				case "w":
 					// Sets winning horse number
 					winningHorse = Integer.parseInt(commandLine[1]);
 					Horse tempW = Configuration.aHorses.get(currentWinner); //  get current winning horse 
@@ -99,7 +97,6 @@ public class TellerMachine {
 					}
 					break;
 				case "Q":
-				case "q":
 					// Quit
 					done = true;
 					//System.out.println("Quit");
