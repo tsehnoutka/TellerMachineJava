@@ -3,11 +3,12 @@ package mypackage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
-
+import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -20,18 +21,18 @@ class Horse {
 	private int number;
 	private String name;
 	private int odds;
-	private String won;
+	private Boolean won;
 
-	public Horse(int n, String sName, int o, String w) {
+	public Horse(int n, String sName, int o, Boolean w) {
 		number = n;
 		name = sName;
 		odds = o;
-		if ( w .contentEquals("won") || w.contentEquals("lost"))
-			won = w;
+		won = w;
 	}
 
 	public void print() {
-		System.out.println(number + "," + name + "," + odds + "," + won);
+		String wTemp = won ? "won" : "lost";
+		System.out.println(number + "," + name + "," + odds + "," + wTemp);
 	} // end print
 
 	public int getNumber() {
@@ -46,22 +47,19 @@ class Horse {
 		return odds;
 	}
 
-	public String Won() {
+	public Boolean Won() {
 		return won;
 	}
 
-	public void setWon(String b) {
+	public void setWon(Boolean b) {
 		won = b;
 	}
 
 }// end of Horse class
 
 public class Configuration {
-	public static int ONES_INIT = 0;
-	public static int FIVES_INIT = 0;
-	public static int TENS_INIT = 0;
-	public static int TWENTYS_INIT = 0;
-	public static int HUNDREDS_INIT = 0;
+	public static ArrayList<Integer> denominations = new ArrayList<>();
+	public static Map<Integer, Integer> InitialQty = new HashMap<>();
 	public static Hashtable<Integer, Horse> aHorses = new Hashtable<Integer, Horse>();
 	private int currentWinner;
 
@@ -79,10 +77,11 @@ public class Configuration {
 	public int getCurrentWinner() {
 		return currentWinner;
 	}
+
 	public void setCurrentWinner(int w) {
-		currentWinner=w;
+		currentWinner = w;
 	}
-	
+
 	private void readXML() {
 		// Populate the horses ( XML file)
 		try {
@@ -93,20 +92,22 @@ public class Configuration {
 			doc.getDocumentElement().normalize();
 
 			NodeList nList = doc.getElementsByTagName("Horse");
-
+			Boolean won =false;
 			for (int temp = 0; temp < nList.getLength(); temp++) {
 				Node nNode = nList.item(temp);
-
+				won =false;
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 					Element eElement = (Element) nNode;
 					int iHorseNumber = Integer.parseInt(eElement.getAttribute("Number"));
 					String sHorseName = eElement.getElementsByTagName("Name").item(0).getTextContent();
 					int iHorseOdds = Integer.parseInt(eElement.getElementsByTagName("Odds").item(0).getTextContent());
 					String bHorseWon = eElement.getElementsByTagName("Won").item(0).getTextContent();
-					if (bHorseWon.contentEquals("won"))
-							setCurrentWinner(iHorseNumber);
-				
-					Horse tempHorse = new Horse(iHorseNumber, sHorseName, iHorseOdds, bHorseWon);
+					if (bHorseWon.contentEquals("won")) {
+						setCurrentWinner(iHorseNumber);
+						won =true;
+					}
+
+					Horse tempHorse = new Horse(iHorseNumber, sHorseName, iHorseOdds, won);
 
 					aHorses.put(iHorseNumber, tempHorse);
 				} // end if
@@ -122,39 +123,34 @@ public class Configuration {
 		FileInputStream fstream;
 		try {
 			fstream = new FileInputStream("Input.txt");
-
+			String inLine;
 			BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
-
-			// Read File Line By Line
-			String inLine = br.readLine(); // read inventory line
-			String inLine1 = br.readLine(); // read One line
-			String inLine5 = br.readLine(); // read One line
-			String inLine10 = br.readLine(); // read One line
-			String inLine20 = br.readLine(); // read One line
-			String inLine100 = br.readLine(); // read One line
-
-			ONES_INIT = Integer.parseInt(inLine1.substring(inLine1.lastIndexOf(",") + 1)); // read $1 line
-			FIVES_INIT = Integer.parseInt(inLine5.substring(inLine5.lastIndexOf(",") + 1)); // read $5 line
-			TENS_INIT = Integer.parseInt(inLine10.substring(inLine10.lastIndexOf(",") + 1)); // read $10 line
-			TWENTYS_INIT = Integer.parseInt(inLine20.substring(inLine20.lastIndexOf(",") + 1)); // read $20 line
-			HUNDREDS_INIT = Integer.parseInt(inLine100.substring(inLine100.lastIndexOf(",") + 1)); // read $100 line
-
+			int x=0;
+			while ((inLine = br.readLine()) != null) {
+				try {
+					String[] arrOfStr = inLine.split(",");
+					Integer tempD =  Integer.parseInt(arrOfStr[0].substring(1)); // get the denomination and remove the '$'
+					denominations.add(x++,tempD);
+					InitialQty.put( tempD,Integer.parseInt(arrOfStr[1]));
+				} catch( NumberFormatException e) {
+					// do nothing - move onto next line
+				}
+		
 			// Close the input stream
+			}
 			fstream.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch ( IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 
 	}// end readFile
 
 	public Configuration() {
 		// open and read files
 		// populate the Configuration class
-		currentWinner=0;
+		currentWinner = 0;
 		readXML();
 		readFile();
 

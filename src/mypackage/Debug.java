@@ -10,9 +10,8 @@ public class Debug {
 	}
 	
 	public void print(int l, String s) {
-		Severity sev = null;
 		if (l <= level)
-			System.out.println("DEBUG(" + sev.fromOrdinal(l) + ") : " + s);
+			System.out.println("DEBUG(" + Severity.fromOrdinal(l) + ") : " + s);
 	} //  end print 
 
 }
