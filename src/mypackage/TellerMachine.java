@@ -33,11 +33,9 @@ public class TellerMachine {
 		try {
 			@SuppressWarnings("unused")
 			String strY= commandLine[1];
-			@SuppressWarnings("unused")
-			Integer intY = Integer.parseInt(commandLine[1]);
 		}
 		catch(NumberFormatException | ArrayIndexOutOfBoundsException e){
-			System.out.println("Invalid Command : " + command);
+			System.out.println("Invalid Command : " + commandLine);
 			return;
 		}
 
@@ -117,7 +115,7 @@ public class TellerMachine {
 				// do nothing
 				break;
 			default:
-				System.out.println("Invalid Command : " + command);
+				System.out.println("Invalid Command : " + commandLine);
 			} // end switch
 		} // end else
 	}
